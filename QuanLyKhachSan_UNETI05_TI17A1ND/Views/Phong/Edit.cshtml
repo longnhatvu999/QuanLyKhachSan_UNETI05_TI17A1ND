@@ -1,5 +1,60 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model QuanLyKhachSan_UNETI05_TI17A1ND.Models.Phong
 @{
+    ViewData["Title"] = "Sửa phòng";
+}
+
+<h2><i class="bi bi-pencil"></i> Sửa phòng</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <input type="hidden" asp-for="MaPhong" />
+
+            <div class="mb-3">
+                <label asp-for="SoPhong" class="form-label"></label>
+                <input asp-for="SoPhong" class="form-control" />
+                <span asp-validation-for="SoPhong" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="MaLoaiPhong" class="form-label"></label>
+                <select asp-for="MaLoaiPhong" asp-items="ViewBag.DanhSachLoaiPhong" class="form-select"></select>
+                <span asp-validation-for="MaLoaiPhong" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Tang" class="form-label"></label>
+                <input asp-for="Tang" type="number" class="form-control" />
+                <span asp-validation-for="Tang" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DonGiaDem" class="form-label"></label>
+                <input asp-for="DonGiaDem" type="number" step="any" min="0" class="form-control" />
+                <span asp-validation-for="DonGiaDem" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="MoTa" class="form-label"></label>
+                <textarea asp-for="MoTa" rows="3" class="form-control"></textarea>
+                <span asp-validation-for="MoTa" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TrangThai" class="form-label"></label>
+                <select asp-for="TrangThai" asp-items="ViewBag.DanhSachTrangThai" class="form-select"></select>
+                <span asp-validation-for="TrangThai" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Cập nhật</button>
+            <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

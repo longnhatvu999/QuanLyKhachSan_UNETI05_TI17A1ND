@@ -1,5 +1,54 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model QuanLyKhachSan_UNETI05_TI17A1ND.Models.Phong
 @{
+    ViewData["Title"] = "Chi tiết phòng";
+}
+
+<h2><i class="bi bi-info-circle"></i> Chi tiết phòng @Model.SoPhong</h2>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">Mã phòng</dt>
+    <dd class="col-sm-9">@Model.MaPhong</dd>
+
+    <dt class="col-sm-3">Số phòng</dt>
+    <dd class="col-sm-9"><strong>@Model.SoPhong</strong></dd>
+
+    <dt class="col-sm-3">Loại phòng</dt>
+    <dd class="col-sm-9">@Model.LoaiPhong?.TenLoaiPhong</dd>
+
+    <dt class="col-sm-3">Tầng</dt>
+    <dd class="col-sm-9">@Model.Tang</dd>
+
+    <dt class="col-sm-3">Đơn giá đêm</dt>
+    <dd class="col-sm-9">@Model.DonGiaDem.ToString("N0") VNĐ</dd>
+
+    <dt class="col-sm-3">Mô tả</dt>
+    <dd class="col-sm-9">@Model.MoTa</dd>
+
+    <dt class="col-sm-3">Trạng thái</dt>
+    <dd class="col-sm-9">
+        @switch (Model.TrangThai)
+        {
+            case "Sẵn sàng":
+                <span class="badge bg-success">Sẵn sàng</span>
+                break;
+            case "Đang sử dụng":
+                <span class="badge bg-warning text-dark">Đang sử dụng</span>
+                break;
+            case "Tạm ngừng":
+                <span class="badge bg-secondary">Tạm ngừng</span>
+                break;
+        }
+    </dd>
+</dl>
+
+<a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
+@if (Context.Session.GetInt32("MaTaiKhoan") != null &&
+     Context.Session.GetString("VaiTro") != "Admin" &&
+     Model.TrangThai == "Sẵn sàng")
+{
+    <a asp-controller="PhieuDatPhong" asp-action="DatPhong" asp-route-maPhong="@Model.MaPhong"
+       class="btn btn-success">
+        <i class="bi bi-calendar-plus"></i> Đặt phòng ngay
+    </a>
 }
