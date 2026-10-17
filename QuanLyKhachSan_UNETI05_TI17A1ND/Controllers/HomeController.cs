@@ -1,6 +1,12 @@
+// ============================================================
+// Họ và tên: Vũ Long Nhật
+// Mã sinh viên: 23203100081
+// Nội dung thực hiện: Trang chủ của hệ thống
+// Module: 1
+// Lớp: TI17A1ND - Nhóm 05
+// ============================================================
+
 using Microsoft.AspNetCore.Mvc;
-using QuanLyKhachSan_UNETI05_TI17A1ND.Models;
-using System.Diagnostics;
 
 namespace QuanLyKhachSan_UNETI05_TI17A1ND.Controllers
 {
@@ -9,17 +15,6 @@ namespace QuanLyKhachSan_UNETI05_TI17A1ND.Controllers
         public IActionResult Index()
         {
             return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
