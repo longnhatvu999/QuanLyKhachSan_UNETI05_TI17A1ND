@@ -1,6 +1,6 @@
 ﻿// ============================================================
-// Họ và tên: Vũ Long Nhật
-// Mã sinh viên: 23203100081
+// Họ và tên: Vũ Đức Huy
+// Mã sinh viên: 23203100009
 // Nội dung thực hiện: Entity Phong - Quản lý phòng, tìm kiếm, lọc, phân trang
 // Module: 2
 // Lớp: TI17A1ND - Nhóm 05
