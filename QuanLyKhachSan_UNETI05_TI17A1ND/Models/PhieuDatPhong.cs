@@ -1,6 +1,6 @@
 ﻿// ============================================================
-// Họ và tên: Vũ Long Nhật
-// Mã sinh viên: 
+// Họ và tên: Trần Tuấn Mạnh và Bùi Hồng Anh
+// Mã sinh viên: 23203100017 - 23203100057
 // Nội dung thực hiện:
 //   - SV3: Entity + nghiệp vụ đặt phòng, chi tiết đặt phòng
 //   - SV4: Nghiệp vụ duyệt, nhận/trả phòng, thống kê
