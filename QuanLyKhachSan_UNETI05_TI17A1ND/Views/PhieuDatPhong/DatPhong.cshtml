@@ -1,5 +1,66 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿﻿@model QuanLyKhachSan_UNETI05_TI17A1ND.ViewModels.DatPhongViewModel
 @{
+    ViewData["Title"] = "Đặt phòng";
+}
+
+<h2><i class="bi bi-calendar-check"></i> Đặt phòng @Model.SoPhong</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Thông tin phòng</h5>
+                <p><strong>Số phòng:</strong> @Model.SoPhong</p>
+                <p><strong>Loại phòng:</strong> @Model.TenLoaiPhong</p>
+                <p><strong>Đơn giá đêm:</strong> @Model.DonGiaDem.ToString("N0") VNĐ</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <form asp-action="DatPhong" method="post">
+            <input type="hidden" asp-for="MaPhong" />
+            <input type="hidden" asp-for="SoPhong" />
+            <input type="hidden" asp-for="TenLoaiPhong" />
+            <input type="hidden" asp-for="DonGiaDem" />
+
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NgayNhanDuKien" class="form-label"></label>
+                    <input asp-for="NgayNhanDuKien" type="date" class="form-control" />
+                    <span asp-validation-for="NgayNhanDuKien" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NgayTraDuKien" class="form-label"></label>
+                    <input asp-for="NgayTraDuKien" type="date" class="form-control" />
+                    <span asp-validation-for="NgayTraDuKien" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="GhiChu" class="form-label"></label>
+                <textarea asp-for="GhiChu" rows="3" class="form-control"
+                          placeholder="Yêu cầu đặc biệt (nếu có)..."></textarea>
+            </div>
+
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i>
+                Đơn giá, số đêm và tổng tiền sẽ được <strong>hệ thống tự tính</strong> sau khi bạn xác nhận.
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-circle"></i> Xác nhận đặt phòng
+            </button>
+            <a asp-controller="Phong" asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Quay lại
+            </a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

@@ -1,5 +1,113 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿﻿@model IEnumerable<QuanLyKhachSan_UNETI05_TI17A1ND.Models.PhieuDatPhong>
 @{
+    ViewData["Title"] = "Quản lý phiếu đặt phòng";
+    string? searchString = ViewBag.SearchString;
+    string? trangThai = ViewBag.TrangThai;
+    var dsTrangThai = ViewBag.DanhSachTrangThai as string[] ?? Array.Empty<string>();
+}
+
+<h2><i class="bi bi-file-earmark-text"></i> Quản lý phiếu đặt phòng</h2>
+<hr />
+
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input type="text" name="searchString" value="@searchString"
+               class="form-control" placeholder="Tìm theo tên khách hàng..." />
+    </div>
+    <div class="col-md-3">
+        <select name="trangThai" class="form-select">
+            <option value="">-- Tất cả trạng thái --</option>
+            @foreach (var tt in dsTrangThai)
+            {
+                <option value="@tt" selected="@(trangThai == tt)">@tt</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-5">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Tìm</button>
+        <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-x-circle"></i> Xóa lọc</a>
+    </div>
+</form>
+
+@if (Model.Any())
+{
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Mã</th>
+                <th>Khách hàng</th>
+                <th>Ngày đặt</th>
+                <th>Ngày nhận</th>
+                <th>Ngày trả</th>
+                <th class="text-end">Tổng tiền</th>
+                <th class="text-center">Trạng thái</th>
+                <th class="text-center">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>#@p.MaPhieuDat</td>
+                    <td>@p.KhachHang?.HoTen</td>
+                    <td>@p.NgayDat.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@p.NgayNhanDuKien.ToString("dd/MM/yyyy")</td>
+                    <td>@p.NgayTraDuKien.ToString("dd/MM/yyyy")</td>
+                    <td class="text-end">@p.TongTienDuKien.ToString("N0") VNĐ</td>
+                    <td class="text-center">
+                        @switch (p.TrangThai)
+                        {
+                            case "Chờ xác nhận": <span class="badge bg-warning text-dark">Chờ xác nhận</span> break;
+                            case "Đã xác nhận": <span class="badge bg-info text-dark">Đã xác nhận</span> break;
+                            case "Đã nhận phòng": <span class="badge bg-primary">Đã nhận phòng</span> break;
+                            case "Đã trả phòng": <span class="badge bg-success">Đã trả phòng</span> break;
+                            case "Đã hủy": <span class="badge bg-secondary">Đã hủy</span> break;
+                        }
+                    </td>
+                    <td class="text-center text-nowrap">
+    <a asp-action="Details" asp-route-id="@p.MaPhieuDat" class="btn btn-sm btn-info" title="Xem chi tiết">
+        <i class="bi bi-eye"></i>
+    </a>
+
+    @if (p.TrangThai == "Chờ xác nhận")
+    {
+        <form asp-action="XacNhanDatPhong" asp-route-id="@p.MaPhieuDat" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-sm btn-success" title="Xác nhận"
+                    onclick="return confirm('Xác nhận phiếu này?');">
+                <i class="bi bi-check-circle"></i>
+            </button>
+        </form>
+    }
+
+    @if (p.TrangThai == "Đã xác nhận")
+    {
+        <form asp-action="XacNhanNhanPhong" asp-route-id="@p.MaPhieuDat" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-sm btn-primary" title="Nhận phòng"
+                    onclick="return confirm('Xác nhận khách đã nhận phòng?');">
+                <i class="bi bi-box-arrow-in-right"></i>
+            </button>
+        </form>
+    }
+
+    @if (p.TrangThai == "Đã nhận phòng")
+    {
+        <form asp-action="XacNhanTraPhong" asp-route-id="@p.MaPhieuDat" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-sm btn-warning" title="Trả phòng"
+                    onclick="return confirm('Xác nhận khách đã trả phòng?');">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+        </form>
+    }
+</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">Không có phiếu nào.</div>
 }

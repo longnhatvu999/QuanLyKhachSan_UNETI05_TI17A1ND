@@ -1,5 +1,45 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿﻿@model IEnumerable<QuanLyKhachSan_UNETI05_TI17A1ND.Models.PhieuDatPhong>
 @{
+    ViewData["Title"] = "Lịch sử lưu trú";
+}
+
+<h2><i class="bi bi-clock-history"></i> Lịch sử lưu trú</h2>
+<hr />
+
+@if (Model.Any())
+{
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Mã phiếu</th>
+                <th>Ngày nhận</th>
+                <th>Ngày trả</th>
+                <th>Phòng</th>
+                <th class="text-end">Tổng tiền</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                var phong = p.ChiTietDatPhongs?.FirstOrDefault()?.Phong;
+                <tr>
+                    <td>#@p.MaPhieuDat</td>
+                    <td>@p.NgayNhanDuKien.ToString("dd/MM/yyyy")</td>
+                    <td>@p.NgayTraDuKien.ToString("dd/MM/yyyy")</td>
+                    <td>@phong?.SoPhong - @phong?.LoaiPhong?.TenLoaiPhong</td>
+                    <td class="text-end">@p.TongTienDuKien.ToString("N0") VNĐ</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@p.MaPhieuDat" class="btn btn-sm btn-info">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">Bạn chưa có lịch sử lưu trú.</div>
 }

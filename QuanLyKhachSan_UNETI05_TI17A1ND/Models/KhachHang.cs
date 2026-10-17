@@ -1,6 +1,6 @@
 ﻿// ============================================================
-// Họ và tên: Vũ Long Nhật
-// Mã sinh viên: 
+// Họ và tên: Trần Tuấn Mạnh
+// Mã sinh viên: 23203100017
 // Nội dung thực hiện: Entity KhachHang - Quản lý khách hàng
 // Module: 3
 // Lớp: TI17A1ND - Nhóm 05
