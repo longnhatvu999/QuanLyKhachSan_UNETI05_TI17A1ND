@@ -1,8 +1,55 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang chủ";
+    var hoTen = Context.Session.GetString("HoTen");
+    var vaiTro = Context.Session.GetString("VaiTro");
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mt-5">
+    <h1 class="display-4"><i class="bi bi-building"></i> Hệ Thống Quản Lý Khách Sạn</h1>
+    <p class="lead">Bài tập lớn - Nhóm 05 - Lớp TI17A1ND - UNETI</p>
+
+    @if (hoTen != null)
+    {
+        <div class="alert alert-info d-inline-block">
+            Xin chào <strong>@hoTen</strong> (@vaiTro)! Chúc bạn một ngày tốt lành.
+        </div>
+    }
+    else
+    {
+        <p>
+            <a asp-controller="TaiKhoan" asp-action="DangNhap" class="btn btn-primary btn-lg">
+                <i class="bi bi-box-arrow-in-right"></i> Đăng nhập ngay
+            </a>
+        </p>
+    }
+</div>
+
+<div class="row mt-5 text-center">
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h1><i class="bi bi-door-closed text-primary"></i></h1>
+                <h5>Đa dạng phòng</h5>
+                <p>5 loại phòng: Standard, Superior, Deluxe, Suite, Family.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h1><i class="bi bi-calendar-check text-success"></i></h1>
+                <h5>Đặt phòng dễ dàng</h5>
+                <p>Đặt phòng trực tuyến, kiểm tra trùng lịch tự động.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h1><i class="bi bi-graph-up text-warning"></i></h1>
+                <h5>Thống kê chi tiết</h5>
+                <p>Doanh thu theo tháng, lượt đặt theo loại phòng.</p>
+            </div>
+        </div>
+    </div>
 </div>
