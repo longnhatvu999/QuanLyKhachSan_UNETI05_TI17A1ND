@@ -1,5 +1,67 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model QuanLyKhachSan_UNETI05_TI17A1ND.ViewModels.DoiMatKhauViewModel
 @{
+    ViewData["Title"] = "Đổi mật khẩu";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark text-center">
+                <h4><i class="bi bi-shield-lock"></i> Đổi mật khẩu</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-person-circle"></i>
+                    Xin chào <strong>@ViewBag.HoTen</strong>
+                    (@ViewBag.TenDangNhap - @ViewBag.VaiTro)
+                </div>
+
+                <form asp-action="DoiMatKhau" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="MatKhauHienTai" class="form-label"></label>
+                        <input asp-for="MatKhauHienTai" class="form-control" autofocus />
+                        <span asp-validation-for="MatKhauHienTai" class="text-danger"></span>
+                    </div>
+
+                    <hr />
+
+                    <div class="mb-3">
+                        <label asp-for="MatKhauMoi" class="form-label"></label>
+                        <input asp-for="MatKhauMoi" class="form-control" />
+                        <span asp-validation-for="MatKhauMoi" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="XacNhanMatKhauMoi" class="form-label"></label>
+                        <input asp-for="XacNhanMatKhauMoi" class="form-control" />
+                        <span asp-validation-for="XacNhanMatKhauMoi" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-save"></i> Đổi mật khẩu
+                        </button>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Quay lại
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="alert alert-secondary mt-3 small">
+            <strong>Lưu ý:</strong>
+            <ul class="mb-0">
+                <li>Mật khẩu mới phải có ít nhất 6 ký tự.</li>
+                <li>Mật khẩu mới phải khác mật khẩu hiện tại.</li>
+                <li>Sau khi đổi mật khẩu, bạn sẽ được yêu cầu đăng nhập lại.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
