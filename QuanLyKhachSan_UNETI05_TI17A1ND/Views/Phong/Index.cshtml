@@ -216,41 +216,115 @@
     {
         <nav>
             <ul class="pagination justify-content-center">
-                @* Nút Trang trước *@
+
+                @* ==================================================
+               NÚT TRANG ĐẦU
+               ================================================== *@
                 <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                    <a class="page-link" href="@Url.Action("Index", new {
-                        searchString, maLoaiPhong, tang, trangThai, minGia, maxGia,
-                        sortOrder, page = currentPage - 1
-                    })">
+                    <a class="page-link" href="@Url.Action("Index", new
+                       {
+                           searchString,
+                           maLoaiPhong,
+                           tang,
+                           trangThai,
+                           minGia,
+                           maxGia,
+                           sortOrder,
+                           page = 1
+                       })">
+                        <i class="bi bi-chevron-double-left"></i> Đầu
+                    </a>
+                </li>
+
+
+                @* ==================================================
+               NÚT TRANG TRƯỚC
+               ================================================== *@
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new
+                       {
+                           searchString,
+                           maLoaiPhong,
+                           tang,
+                           trangThai,
+                           minGia,
+                           maxGia,
+                           sortOrder,
+                           page = currentPage - 1
+                       })">
                         <i class="bi bi-chevron-left"></i> Trước
                     </a>
                 </li>
 
-                @* Số trang *@
+
+                @* ==================================================
+               SỐ TRANG
+               ================================================== *@
                 @for (int i = 1; i <= totalPages; i++)
                 {
                     <li class="page-item @(i == currentPage ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("Index", new {
-                            searchString, maLoaiPhong, tang, trangThai, minGia, maxGia,
-                            sortOrder, page = i
-                        })">@i</a>
+                        <a class="page-link" href="@Url.Action("Index", new
+                           {
+                               searchString,
+                               maLoaiPhong,
+                               tang,
+                               trangThai,
+                               minGia,
+                               maxGia,
+                               sortOrder,
+                               page = i
+                           })">
+                            @i
+                        </a>
                     </li>
                 }
 
-                @* Nút Trang sau *@
+
+                @* ==================================================
+               NÚT TRANG SAU
+               ================================================== *@
                 <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-                    <a class="page-link" href="@Url.Action("Index", new {
-                        searchString, maLoaiPhong, tang, trangThai, minGia, maxGia,
-                        sortOrder, page = currentPage + 1
-                    })">
+                    <a class="page-link" href="@Url.Action("Index", new
+                       {
+                           searchString,
+                           maLoaiPhong,
+                           tang,
+                           trangThai,
+                           minGia,
+                           maxGia,
+                           sortOrder,
+                           page = currentPage + 1
+                       })">
                         Sau <i class="bi bi-chevron-right"></i>
                     </a>
                 </li>
+
+
+                @* ==================================================
+               NÚT TRANG CUỐI
+               ================================================== *@
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new
+                       {
+                           searchString,
+                           maLoaiPhong,
+                           tang,
+                           trangThai,
+                           minGia,
+                           maxGia,
+                           sortOrder,
+                           page = totalPages
+                       })">
+                        Cuối <i class="bi bi-chevron-double-right"></i>
+                    </a>
+                </li>
+
             </ul>
         </nav>
 
         <p class="text-center text-muted small">
-            Trang <strong>@currentPage</strong> / @totalPages — Tổng <strong>@totalItems</strong> phòng
+            Trang <strong>@currentPage</strong> / @totalPages
+            — Tổng <strong>@totalItems</strong> phòng
         </p>
     }
 }
