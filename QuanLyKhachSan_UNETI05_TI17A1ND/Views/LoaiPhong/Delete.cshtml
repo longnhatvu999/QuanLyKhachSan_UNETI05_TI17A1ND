@@ -3,3 +3,41 @@
 *@
 @{
 }
+@* ============================================================*@
+@*// Họ và tên: VŨ Long Nhật*@
+@*// Mã sinh viên: 23203100081*@
+@*// Nội dung thực hiện: View Delete quản lý loại phòng*@
+@*// Module: 1*@
+@*// Lớp: TI17A1ND - Nhóm 05*@
+@*// ============================================================﻿*@
+@model QuanLyKhachSan_UNETI05_TI17A1ND.Models.LoaiPhong
+@{
+    ViewData["Title"] = "Xóa loại phòng";
+}
+
+<h2 class="text-danger"><i class="bi bi-exclamation-triangle"></i> Xác nhận xóa loại phòng</h2>
+<hr />
+
+<div class="alert alert-warning">
+    Bạn có chắc chắn muốn xóa loại phòng này không? Thao tác này không thể hoàn tác.
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">Tên loại phòng</dt>
+    <dd class="col-sm-9">@Model.TenLoaiPhong</dd>
+
+    <dt class="col-sm-3">Số người tối đa</dt>
+    <dd class="col-sm-9">@Model.SoNguoiToiDa</dd>
+
+    <dt class="col-sm-3">Đơn giá đêm</dt>
+    <dd class="col-sm-9">@Model.DonGiaDem.ToString("N0") VNĐ</dd>
+
+    <dt class="col-sm-3">Mô tả</dt>
+    <dd class="col-sm-9">@Model.MoTa</dd>
+</dl>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="MaLoaiPhong" />
+    <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
+</form>

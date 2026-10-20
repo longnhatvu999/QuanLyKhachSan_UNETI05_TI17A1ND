@@ -3,3 +3,52 @@
 *@
 @{
 }
+@* ============================================================*@
+@*// Họ và tên: VŨ Long Nhật*@
+@*// Mã sinh viên: 23203100081*@
+@*// Nội dung thực hiện: View Details quản lý loại phòng*@
+@*// Module: 1*@
+@*// Lớp: TI17A1ND - Nhóm 05*@
+@*// ============================================================﻿*@
+@model QuanLyKhachSan_UNETI05_TI17A1ND.Models.LoaiPhong
+@{
+    ViewData["Title"] = "Chi tiết loại phòng";
+}
+
+<h2><i class="bi bi-info-circle"></i> Chi tiết loại phòng</h2>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">Mã loại phòng</dt>
+    <dd class="col-sm-9">@Model.MaLoaiPhong</dd>
+
+    <dt class="col-sm-3">Tên loại phòng</dt>
+    <dd class="col-sm-9">@Model.TenLoaiPhong</dd>
+
+    <dt class="col-sm-3">Số người tối đa</dt>
+    <dd class="col-sm-9">@Model.SoNguoiToiDa</dd>
+
+    <dt class="col-sm-3">Đơn giá đêm</dt>
+    <dd class="col-sm-9">@Model.DonGiaDem.ToString("N0") VNĐ</dd>
+
+    <dt class="col-sm-3">Mô tả</dt>
+    <dd class="col-sm-9">@Model.MoTa</dd>
+
+    <dt class="col-sm-3">Trạng thái</dt>
+    <dd class="col-sm-9">
+        @if (Model.TrangThai)
+        {
+            <span class="badge bg-success">Hoạt động</span>
+        }
+        else
+        {
+            <span class="badge bg-secondary">Tạm ngừng</span>
+        }
+    </dd>
+
+    <dt class="col-sm-3">Số phòng thuộc loại này</dt>
+    <dd class="col-sm-9">@(Model.Phongs?.Count ?? 0)</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.MaLoaiPhong" class="btn btn-warning"><i class="bi bi-pencil"></i> Sửa</a>
+<a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>

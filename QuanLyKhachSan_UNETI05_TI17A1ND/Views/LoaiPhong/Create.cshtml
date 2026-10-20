@@ -3,3 +3,68 @@
 *@
 @{
 }
+@* ============================================================*@
+@*// Họ và tên: VŨ Long Nhật*@
+@*// Mã sinh viên: 23203100081*@
+@*// Nội dung thực hiện: View Creat quản lý loại phòng*@
+@*// Module: 1*@
+@*// Lớp: TI17A1ND - Nhóm 05*@
+@*// ============================================================﻿*@
+@model QuanLyKhachSan_UNETI05_TI17A1ND.Models.LoaiPhong
+@{
+    ViewData["Title"] = "Thêm loại phòng";
+}
+
+<h2><i class="bi bi-plus-circle"></i> Thêm loại phòng mới</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="TenLoaiPhong" class="form-label"></label>
+                <input asp-for="TenLoaiPhong" class="form-control" />
+                <span asp-validation-for="TenLoaiPhong" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SoNguoiToiDa" class="form-label"></label>
+                <input asp-for="SoNguoiToiDa" type="number" class="form-control" />
+                <span asp-validation-for="SoNguoiToiDa" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DonGiaDem" class="form-label"></label>
+                <input asp-for="DonGiaDem" type="number" step="1000" class="form-control" />
+                <span asp-validation-for="DonGiaDem" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="MoTa" class="form-label"></label>
+                <textarea asp-for="MoTa" rows="3" class="form-control"></textarea>
+                <span asp-validation-for="MoTa" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Trạng thái</label><br />
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" asp-for="TrangThai" value="true" id="ttTrue" checked />
+                    <label class="form-check-label" for="ttTrue">Hoạt động</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" asp-for="TrangThai" value="false" id="ttFalse" />
+                    <label class="form-check-label" for="ttFalse">Tạm ngừng</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Lưu</button>
+            <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

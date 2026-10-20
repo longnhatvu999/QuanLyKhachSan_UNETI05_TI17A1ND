@@ -3,3 +3,68 @@
 *@
 @{
 }
+@* ============================================================*@
+@*// Họ và tên: VŨ Long Nhật*@
+@*// Mã sinh viên: 23203100081*@
+@*// Nội dung thực hiện: View Index quản lý loại phòng*@
+@*// Module: 1*@
+@*// Lớp: TI17A1ND - Nhóm 05*@
+@*// ============================================================﻿*@
+@model IEnumerable<QuanLyKhachSan_UNETI05_TI17A1ND.Models.LoaiPhong>
+@{
+    ViewData["Title"] = "Danh sách loại phòng";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><i class="bi bi-tags"></i> Danh sách loại phòng</h2>
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Thêm loại phòng
+    </a>
+</div>
+
+<table class="table table-bordered table-hover align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>Mã</th>
+            <th>Tên loại phòng</th>
+            <th class="text-center">Số người tối đa</th>
+            <th class="text-end">Đơn giá đêm</th>
+            <th>Mô tả</th>
+            <th class="text-center">Trạng thái</th>
+            <th class="text-center">Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaLoaiPhong</td>
+                <td><strong>@item.TenLoaiPhong</strong></td>
+                <td class="text-center">@item.SoNguoiToiDa</td>
+                <td class="text-end">@item.DonGiaDem.ToString("N0") VNĐ</td>
+                <td>@item.MoTa</td>
+                <td class="text-center">
+                    @if (item.TrangThai)
+                    {
+                        <span class="badge bg-success">Hoạt động</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Tạm ngừng</span>
+                    }
+                </td>
+                <td class="text-center text-nowrap">
+                    <a asp-action="Details" asp-route-id="@item.MaLoaiPhong" class="btn btn-sm btn-info" title="Chi tiết">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@item.MaLoaiPhong" class="btn btn-sm btn-warning" title="Sửa">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.MaLoaiPhong" class="btn btn-sm btn-danger" title="Xóa">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
