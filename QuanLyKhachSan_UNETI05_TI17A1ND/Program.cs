@@ -36,7 +36,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<QuanLyKhachSan_UNETI05_TI17A1NDContext>();
-    context.Database.Migrate();
+    //context.Database.Migrate();
     DbInitializer.Initialize(context);
 }
 
