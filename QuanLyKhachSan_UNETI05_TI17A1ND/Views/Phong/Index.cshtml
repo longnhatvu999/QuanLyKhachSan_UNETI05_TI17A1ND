@@ -100,14 +100,8 @@
             var arrow = isActive ? (value.EndsWith("_asc") ? "▲" : "▼") : "";
             var url = Url.Action("Index", new
             {
-                searchString,
-                maLoaiPhong,
-                tang,
-                trangThai,
-                minGia,
-                maxGia,
-                sortOrder = nextOrder,
-                page = 1
+                searchString, maLoaiPhong, tang, trangThai, minGia, maxGia,
+                sortOrder = nextOrder, page = 1
             });
             return $"<a href='{url}' class='btn btn-sm btn-outline-secondary {(isActive ? "active" : "")}'>{label} {arrow}</a>";
         }
@@ -158,27 +152,27 @@
                         }
                     </td>
                     <td class="text-center text-nowrap">
-                        <a asp-action="Details" asp-route-id="@item.MaPhong" class="btn btn-sm btn-info" title="Chi tiết">
-                            <i class="bi bi-eye"></i>
-                        </a>
+    <a asp-action="Details" asp-route-id="@item.MaPhong" class="btn btn-sm btn-info" title="Chi tiết">
+        <i class="bi bi-eye"></i>
+    </a>
 
-                        @if (laAdmin)
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.MaPhong" class="btn btn-sm btn-warning" title="Sửa">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <a asp-action="Delete" asp-route-id="@item.MaPhong" class="btn btn-sm btn-danger" title="Xóa">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        }
-                        else if (Context.Session.GetInt32("MaTaiKhoan") != null && item.TrangThai == "Sẵn sàng")
-                        {
-                            <a asp-controller="PhieuDatPhong" asp-action="DatPhong" asp-route-maPhong="@item.MaPhong"
-                               class="btn btn-sm btn-success" title="Đặt phòng">
-                                <i class="bi bi-calendar-plus"></i> Đặt
-                            </a>
-                        }
-                    </td>
+    @if (laAdmin)
+    {
+        <a asp-action="Edit" asp-route-id="@item.MaPhong" class="btn btn-sm btn-warning" title="Sửa">
+            <i class="bi bi-pencil"></i>
+        </a>
+        <a asp-action="Delete" asp-route-id="@item.MaPhong" class="btn btn-sm btn-danger" title="Xóa">
+            <i class="bi bi-trash"></i>
+        </a>
+    }
+    else if (Context.Session.GetInt32("MaTaiKhoan") != null && item.TrangThai == "Sẵn sàng")
+    {
+        <a asp-controller="PhieuDatPhong" asp-action="DatPhong" asp-route-maPhong="@item.MaPhong"
+           class="btn btn-sm btn-success" title="Đặt phòng">
+            <i class="bi bi-calendar-plus"></i> Đặt
+        </a>
+    }
+</td>
                 </tr>
             }
         </tbody>
@@ -193,17 +187,10 @@
             <ul class="pagination justify-content-center">
                 @* Nút Trang trước *@
                 <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                    <a class="page-link" href="@Url.Action("Index", new
-                       {
-                           searchString,
-                           maLoaiPhong,
-                           tang,
-                           trangThai,
-                           minGia,
-                           maxGia,
-                           sortOrder,
-                           page = currentPage - 1
-                       })">
+                    <a class="page-link" href="@Url.Action("Index", new {
+                        searchString, maLoaiPhong, tang, trangThai, minGia, maxGia,
+                        sortOrder, page = currentPage - 1
+                    })">
                         <i class="bi bi-chevron-left"></i> Trước
                     </a>
                 </li>
@@ -212,33 +199,19 @@
                 @for (int i = 1; i <= totalPages; i++)
                 {
                     <li class="page-item @(i == currentPage ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("Index", new
-                           {
-                               searchString,
-                               maLoaiPhong,
-                               tang,
-                               trangThai,
-                               minGia,
-                               maxGia,
-                               sortOrder,
-                               page = i
-                           })">@i</a>
+                        <a class="page-link" href="@Url.Action("Index", new {
+                            searchString, maLoaiPhong, tang, trangThai, minGia, maxGia,
+                            sortOrder, page = i
+                        })">@i</a>
                     </li>
                 }
 
                 @* Nút Trang sau *@
                 <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-                    <a class="page-link" href="@Url.Action("Index", new
-                       {
-                           searchString,
-                           maLoaiPhong,
-                           tang,
-                           trangThai,
-                           minGia,
-                           maxGia,
-                           sortOrder,
-                           page = currentPage + 1
-                       })">
+                    <a class="page-link" href="@Url.Action("Index", new {
+                        searchString, maLoaiPhong, tang, trangThai, minGia, maxGia,
+                        sortOrder, page = currentPage + 1
+                    })">
                         Sau <i class="bi bi-chevron-right"></i>
                     </a>
                 </li>

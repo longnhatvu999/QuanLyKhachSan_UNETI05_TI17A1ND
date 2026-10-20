@@ -1,47 +1,195 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@* ============================================================
+   Họ và tên: [Tên Trưởng Nhóm]
+   Mã sinh viên: [Mã SV Trưởng Nhóm]
+   Nội dung thực hiện: Layout chung - Menu động theo vai trò (Admin/Khách)
+   Module: Chung
+   Lớp: TI17A1ND - Nhóm 05
+   ============================================================ *@
+@{
+    var vaiTro = Context.Session.GetString("VaiTro");
+    var hoTen = Context.Session.GetString("HoTen");
+    var daDangNhap = Context.Session.GetInt32("MaTaiKhoan") != null;
+    var laAdmin = vaiTro == "Admin";
+}
+<!DOCTYPE html>
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - QuanLyKhachSan_UNETI05_TI17A1ND</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - Quản Lý Khách Sạn</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/QuanLyKhachSan_UNETI05_TI17A1ND.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">QuanLyKhachSan_UNETI05_TI17A1ND</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-building"></i> Quản Lý Khách Sạn
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarMain">
+
+                    @* ============================================ *@
+                    @* MENU BÊN TRÁI (chức năng theo vai trò)       *@
+                    @* ============================================ *@
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+                        @if (laAdmin)
+                        {
+                            @* ===== MENU ADMIN ===== *@
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                    <i class="bi bi-gear"></i> Quản lý
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="LoaiPhong" asp-action="Index">
+                                            <i class="bi bi-tags"></i> Loại phòng
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Phong" asp-action="Index">
+                                            <i class="bi bi-door-closed"></i> Phòng
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="KhachHang" asp-action="Index">
+                                            <i class="bi bi-people"></i> Khách hàng
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="PhieuDatPhong" asp-action="Index">
+                                            <i class="bi bi-file-earmark-text"></i> Phiếu đặt phòng
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="ThongKe" asp-action="Dashboard">
+                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="ThongKe" asp-action="DoanhThu">
+                                    <i class="bi bi-graph-up"></i> Thống kê
+                                </a>
+                            </li>
+                        }
+                        else if (daDangNhap)
+                        {
+                            @* ===== MENU KHÁCH HÀNG ===== *@
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Phong" asp-action="Index">Danh sách phòng</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="PhieuDatPhong" asp-action="CuaToi">Phiếu của tôi</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="PhieuDatPhong" asp-action="LichSuLuuTru">Lịch sử lưu trú</a>
+                            </li>
+                        }
+                    </ul>
+
+                    @* ============================================ *@
+                    @* MENU BÊN PHẢI (Đăng nhập/Đăng ký hoặc User) *@
+                    @* ============================================ *@
+                    <ul class="navbar-nav">
+                        @if (daDangNhap)
+                        {
+                            @* ===== DROPDOWN NGƯỜI DÙNG (DUY NHẤT Ở ĐÂY) ===== *@
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                    <i class="bi bi-person-circle"></i> @hoTen
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <span class="dropdown-item-text small">
+                                            Vai trò: <strong>@vaiTro</strong>
+                                        </span>
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+
+                                    @* Chỉ Khách hàng mới có "Thông tin cá nhân" *@
+                                    @if (!laAdmin)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="KhachHang" asp-action="ThongTinCaNhan">
+                                                <i class="bi bi-person-badge"></i> Thông tin cá nhân
+                                            </a>
+                                        </li>
+                                    }
+
+                                    @* Cả Admin và Khách hàng đều có "Đổi mật khẩu" *@
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="DoiMatKhau">
+                                            <i class="bi bi-shield-lock"></i> Đổi mật khẩu
+                                        </a>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" asp-controller="TaiKhoan" asp-action="DangXuat">
+                                            <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="TaiKhoan" asp-action="DangNhap">
+                                    <i class="bi bi-box-arrow-in-right"></i> Đăng nhập
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="TaiKhoan" asp-action="DangKy">
+                                    <i class="bi bi-person-plus"></i> Đăng ký
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container mt-3">
+        @* Thông báo thành công *@
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle"></i> @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @* Thông báo lỗi *@
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - QuanLyKhachSan_UNETI05_TI17A1ND - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer text-muted mt-4">
+        <div class="container text-center py-3">
+            &copy; 2026 - QuanLyKhachSan_UNETI05_TI17A1ND - Nhóm 05 - Lớp TI17A1ND
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
