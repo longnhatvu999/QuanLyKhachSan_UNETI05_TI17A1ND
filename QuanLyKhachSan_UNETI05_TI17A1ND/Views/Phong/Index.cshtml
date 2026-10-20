@@ -183,27 +183,27 @@
                         }
                     </td>
                     <td class="text-center text-nowrap">
-    <a asp-action="Details" asp-route-id="@item.MaPhong" class="btn btn-sm btn-info" title="Chi tiết">
-        <i class="bi bi-eye"></i>
-    </a>
+                        <a asp-action="Details" asp-route-id="@item.MaPhong" class="btn btn-sm btn-info" title="Chi tiết">
+                            <i class="bi bi-eye"></i>
+                        </a>
 
-    @if (laAdmin)
-    {
-        <a asp-action="Edit" asp-route-id="@item.MaPhong" class="btn btn-sm btn-warning" title="Sửa">
-            <i class="bi bi-pencil"></i>
-        </a>
-        <a asp-action="Delete" asp-route-id="@item.MaPhong" class="btn btn-sm btn-danger" title="Xóa">
-            <i class="bi bi-trash"></i>
-        </a>
-    }
-    else if (Context.Session.GetInt32("MaTaiKhoan") != null && item.TrangThai == "Sẵn sàng")
-    {
-        <a asp-controller="PhieuDatPhong" asp-action="DatPhong" asp-route-maPhong="@item.MaPhong"
-           class="btn btn-sm btn-success" title="Đặt phòng">
-            <i class="bi bi-calendar-plus"></i> Đặt
-        </a>
-    }
-</td>
+                        @if (laAdmin)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.MaPhong" class="btn btn-sm btn-warning" title="Sửa">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.MaPhong" class="btn btn-sm btn-danger" title="Xóa">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        }
+                        else if (Context.Session.GetInt32("MaTaiKhoan") != null && item.TrangThai == "Sẵn sàng")
+                        {
+                            <a asp-controller="PhieuDatPhong" asp-action="DatPhong" asp-route-maPhong="@item.MaPhong"
+                               class="btn btn-sm btn-success" title="Đặt phòng">
+                                <i class="bi bi-calendar-plus"></i> Đặt
+                            </a>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
