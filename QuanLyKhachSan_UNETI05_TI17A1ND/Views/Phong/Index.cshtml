@@ -93,22 +93,53 @@
 <div class="mb-2 small">
     <strong>Sắp xếp:</strong>
     @{
-        string SortLink(string value, string label)
+        string SortLink(string ascValue, string descValue, string label)
         {
-            var isActive = sortOrder == value;
-            var nextOrder = isActive ? value.Replace("_asc", "_desc").Replace("_desc", "_asc") : value;
-            var arrow = isActive ? (value.EndsWith("_asc") ? "▲" : "▼") : "";
+            bool isAsc = sortOrder == ascValue;
+            bool isDesc = sortOrder == descValue;
+
+            string nextOrder;
+
+            // Chưa sắp xếp hoặc đang giảm → bấm sẽ tăng
+            if (!isAsc)
+            {
+                nextOrder = ascValue;
+            }
+            // Đang tăng → bấm sẽ giảm
+            else
+            {
+                nextOrder = descValue;
+            }
+
+            string arrow = "";
+
+            if (isAsc)
+            {
+                arrow = " ▲";
+            }
+            else if (isDesc)
+            {
+                arrow = " ▼";
+            }
+
             var url = Url.Action("Index", new
             {
-                searchString, maLoaiPhong, tang, trangThai, minGia, maxGia,
-                sortOrder = nextOrder, page = 1
+                searchString,
+                maLoaiPhong,
+                tang,
+                trangThai,
+                minGia,
+                maxGia,
+                sortOrder = nextOrder,
+                page = 1
             });
-            return $"<a href='{url}' class='btn btn-sm btn-outline-secondary {(isActive ? "active" : "")}'>{label} {arrow}</a>";
+
+            return $"<a href='{url}' class='btn btn-sm btn-outline-secondary {(isAsc || isDesc ? "active" : "")}'>{label}{arrow}</a>";
         }
     }
-    @Html.Raw(SortLink("soPhong_asc", "Số phòng"))
-    @Html.Raw(SortLink("gia_asc", "Giá"))
-    @Html.Raw(SortLink("tang_asc", "Tầng"))
+    @Html.Raw(SortLink("soPhong_asc", "soPhong_desc", "Số phòng"))
+    @Html.Raw(SortLink("gia_asc", "gia_desc", "Giá"))
+    @Html.Raw(SortLink("tang_asc", "tang_desc", "Tầng"))
 </div>
 
 @* ============================================================ *@
