@@ -299,6 +299,7 @@ namespace QuanLyKhachSan_UNETI05_TI17A1ND.Controllers
             return RedirectToAction(nameof(Details), new { id });
         }
 
+
         // ==================================================
         // KHÁCH HÀNG: Lịch sử lưu trú (chỉ phiếu Đã trả phòng)
         // ==================================================
@@ -324,9 +325,6 @@ namespace QuanLyKhachSan_UNETI05_TI17A1ND.Controllers
             return View(lichSu);
         }
 
-        // ==================================================
-        // ADMIN: Danh sách tất cả phiếu đặt phòng (tạm thời)
-        // ==================================================
         public async Task<IActionResult> Index(string? searchString, string? trangThai)
         {
             if (HttpContext.Session.GetString("VaiTro") != "Admin")
