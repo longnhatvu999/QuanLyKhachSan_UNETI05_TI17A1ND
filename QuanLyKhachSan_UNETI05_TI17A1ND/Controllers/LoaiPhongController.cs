@@ -100,9 +100,27 @@ namespace QuanLyKhachSan_UNETI05_TI17A1ND.Controllers
 
             try
             {
+                // 1. Cập nhật thông tin Loại phòng
                 _context.Update(loai);
+
+                // ========================================================
+                // 2. ĐỒNG BỘ GIÁ XUỐNG TẤT CẢ CÁC PHÒNG THUỘC LOẠI NÀY
+                // ========================================================
+                var dsPhongLienQuan = await _context.Phongs
+                    .Where(p => p.MaLoaiPhong == id)
+                    .ToListAsync();
+
+                if (dsPhongLienQuan.Any())
+                {
+                    foreach (var phong in dsPhongLienQuan)
+                    {
+                        phong.DonGiaDem = loai.DonGiaDem; // Gán giá mới
+                    }
+                    _context.UpdateRange(dsPhongLienQuan);
+                }
+
                 await _context.SaveChangesAsync();
-                TempData["Success"] = "Cập nhật loại phòng thành công!";
+                TempData["Success"] = "Cập nhật loại phòng và đồng bộ giá phòng thành công!";
             }
             catch (DbUpdateConcurrencyException)
             {
