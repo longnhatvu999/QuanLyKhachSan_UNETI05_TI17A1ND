@@ -256,6 +256,141 @@ namespace QuanLyKhachSan_UNETI05_TI17A1ND.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction(nameof(DangNhap));
         }
+        // ==================================================
+        // ADMIN: Danh sách tài khoản
+        // ==================================================
+        public async Task<IActionResult> DanhSachTaiKhoan()
+        {
+            if (HttpContext.Session.GetString("VaiTro") != "Admin")
+                return RedirectToAction("TuChoi", "TaiKhoan");
+
+            var dsTaiKhoan = await _context.TaiKhoans.ToListAsync();
+            return View(dsTaiKhoan);
+        }
+
+        // ==================================================
+        // ADMIN: Sửa tài khoản (GET) - Bao gồm cả đổi vai trò & trạng thái
+        // ==================================================
+        [HttpGet]
+        public async Task<IActionResult> SuaTaiKhoan(int id)
+        {
+            if (HttpContext.Session.GetString("VaiTro") != "Admin")
+                return RedirectToAction("TuChoi", "TaiKhoan");
+
+            var tk = await _context.TaiKhoans.FindAsync(id);
+            if (tk == null) return NotFound();
+
+            return View(tk);
+        }
+
+        // ==================================================
+        // ADMIN: Sửa tài khoản (POST)
+        // ==================================================
+        // ==================================================
+        // ADMIN: Sửa tài khoản (POST)
+        // ==================================================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SuaTaiKhoan(int id, string hoTen, string email, string vaiTroMoi, bool trangThai)
+        {
+            if (HttpContext.Session.GetString("VaiTro") != "Admin")
+                return RedirectToAction("TuChoi", "TaiKhoan");
+
+            // Lấy Tài khoản kèm theo thông tin Khách hàng (nếu có)
+            var tk = await _context.TaiKhoans
+                .Include(t => t.KhachHang)
+                .FirstOrDefaultAsync(t => t.MaTaiKhoan == id);
+
+            if (tk == null) return NotFound();
+
+            // Không cho phép Admin tự tước quyền hoặc tự khóa chính mình
+            int? maTaiKhoanHienTai = HttpContext.Session.GetInt32("MaTaiKhoan");
+            if (tk.MaTaiKhoan == maTaiKhoanHienTai && (vaiTroMoi != "Admin" || trangThai == false))
+            {
+                TempData["Error"] = "Bạn không thể tự hạ quyền hoặc tự khóa tài khoản của chính mình!";
+                return RedirectToAction(nameof(DanhSachTaiKhoan));
+            }
+
+            // 1. Cập nhật bảng Tài khoản
+            tk.HoTen = hoTen;
+            tk.Email = email;
+            tk.VaiTro = vaiTroMoi;
+            tk.TrangThai = trangThai;
+            _context.Update(tk);
+
+            // 2. Đồng bộ sang bảng Khách hàng (nếu tài khoản này có hồ sơ khách hàng)
+            if (tk.KhachHang != null)
+            {
+                tk.KhachHang.HoTen = hoTen;
+                tk.KhachHang.Email = email;
+                tk.KhachHang.TrangThai = trangThai; // Đồng bộ luôn trạng thái
+                _context.Update(tk.KhachHang);
+            }
+
+            await _context.SaveChangesAsync();
+
+            // 3. Cập nhật lại Session nếu Admin tự sửa tên của chính mình
+            if (tk.MaTaiKhoan == maTaiKhoanHienTai)
+            {
+                HttpContext.Session.SetString("HoTen", tk.HoTen);
+            }
+
+            TempData["Success"] = $"Đã cập nhật tài khoản {tk.TenDangNhap} thành công.";
+            return RedirectToAction(nameof(DanhSachTaiKhoan));
+        }
+
+        // ==================================================
+        // ADMIN: Xóa tài khoản (Có kiểm tra ràng buộc dữ liệu)
+        // ==================================================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> XoaTaiKhoan(int id)
+        {
+            if (HttpContext.Session.GetString("VaiTro") != "Admin")
+                return RedirectToAction("TuChoi", "TaiKhoan");
+
+            var tk = await _context.TaiKhoans
+                .Include(t => t.KhachHang)
+                .ThenInclude(k => k.PhieuDatPhongs)
+                .FirstOrDefaultAsync(t => t.MaTaiKhoan == id);
+
+            if (tk == null) return NotFound();
+
+            // 1. Không cho Admin tự xóa mình
+            if (tk.MaTaiKhoan == HttpContext.Session.GetInt32("MaTaiKhoan"))
+            {
+                TempData["Error"] = "Bạn không thể tự xóa tài khoản của chính mình!";
+                return RedirectToAction(nameof(DanhSachTaiKhoan));
+            }
+
+            // ========================================================
+            // 2. THÊM DÒNG NÀY: Chặn không cho xóa bất kỳ tài khoản Admin nào
+            // ========================================================
+            if (tk.VaiTro == "Admin")
+            {
+                TempData["Error"] = "Không thể xóa tài khoản Admin! Nếu muốn vô hiệu hóa, vui lòng dùng chức năng 'Sửa' để Khóa tài khoản.";
+                return RedirectToAction(nameof(DanhSachTaiKhoan));
+            }
+
+            // 3. Kiểm tra xem khách hàng này đã có lịch sử đặt phòng chưa
+            if (tk.KhachHang != null && tk.KhachHang.PhieuDatPhongs != null && tk.KhachHang.PhieuDatPhongs.Any())
+            {
+                TempData["Error"] = "Không thể xóa! Tài khoản này đã có lịch sử đặt phòng. Hãy dùng chức năng 'Sửa' để Khóa tài khoản.";
+                return RedirectToAction(nameof(DanhSachTaiKhoan));
+            }
+
+            // 4. Tiến hành xóa (Phải xóa Khách Hàng trước để tránh lỗi Khóa Ngoại)
+            if (tk.KhachHang != null)
+            {
+                _context.KhachHangs.Remove(tk.KhachHang);
+            }
+            _context.TaiKhoans.Remove(tk);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = $"Đã xóa tài khoản {tk.TenDangNhap} thành công.";
+            return RedirectToAction(nameof(DanhSachTaiKhoan));
+        }
     }
+
 
 }

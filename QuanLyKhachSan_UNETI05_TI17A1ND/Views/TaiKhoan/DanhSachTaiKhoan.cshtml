@@ -1,0 +1,69 @@
+﻿@model IEnumerable<QuanLyKhachSan_UNETI05_TI17A1ND.Models.TaiKhoan>
+@{
+    ViewData["Title"] = "Danh sách Tài khoản";
+}
+
+<div class="container mt-4">
+    <h2>Danh sách Tài khoản Hệ thống</h2>
+
+    <table class="table table-bordered table-striped mt-3 align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Mã TK</th>
+                <th>Tên đăng nhập</th>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>Vai trò</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MaTaiKhoan</td>
+                    <td>@item.TenDangNhap</td>
+                    <td>@item.HoTen</td>
+                    <td>@item.Email</td>
+                    <td>
+                        @if (item.VaiTro == "Admin")
+                        {
+                            <span class="badge bg-danger">Admin</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-primary">Khách hàng</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.TrangThai)
+                        {
+                            <span class="text-success fw-bold">Hoạt động</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger fw-bold">Bị khóa</span>
+                        }
+                    </td>
+                    <td>
+                        <!-- Nút Sửa (Hiển thị cho tất cả) -->
+                        <a asp-action="SuaTaiKhoan" asp-route-id="@item.MaTaiKhoan" class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil-square"></i> Sửa
+                        </a>
+                        
+                        <!-- Nút Xóa (CHỈ hiển thị nếu tài khoản KHÔNG PHẢI là Admin) -->
+                        @if (item.VaiTro != "Admin")
+                        {
+                            <form asp-action="XoaTaiKhoan" asp-route-id="@item.MaTaiKhoan" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản @item.TenDangNhap không? Hành động này không thể hoàn tác!');">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i> Xóa
+                                </button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
