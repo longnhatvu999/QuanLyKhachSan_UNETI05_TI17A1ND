@@ -1,6 +1,6 @@
 ﻿@* ============================================================
-   Họ và tên: [Tên Trưởng Nhóm]
-   Mã sinh viên: [Mã SV Trưởng Nhóm]
+   Họ và tên: Vũ Long Nhật (Bạn hãy sửa lại tên người phụ trách Layout nếu cần)
+   Mã sinh viên: 23203100081
    Nội dung thực hiện: Layout chung - Menu động theo vai trò (Admin/Khách)
    Module: Chung
    Lớp: TI17A1ND - Nhóm 05
@@ -49,6 +49,11 @@
                                     <i class="bi bi-gear"></i> Quản lý
                                 </a>
                                 <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="DanhSachTaiKhoan">
+                                            <i class="bi bi-person-gear"></i> Quản lý Tài khoản
+                                        </a>
+                                    </li>
                                     <li>
                                         <a class="dropdown-item" asp-controller="LoaiPhong" asp-action="Index">
                                             <i class="bi bi-tags"></i> Loại phòng
