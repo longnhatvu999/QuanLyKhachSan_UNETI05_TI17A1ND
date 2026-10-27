@@ -63,10 +63,18 @@
                             <span asp-validation-for="HoTen" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label asp-for="SoDienThoai" class="form-label"></label>
-                            <input asp-for="SoDienThoai" class="form-control" />
-                            <span asp-validation-for="SoDienThoai" class="text-danger"></span>
-                        </div>
+                             <label asp-for="SoDienThoai" class="form-label"></label>
+                                 <!-- Đã thêm các thuộc tính ép định dạng 10 số -->
+                                     <input asp-for="SoDienThoai" 
+                                            type="tel" 
+                                            class="form-control" 
+                                            maxlength="10" 
+                                            pattern="[0-9]{10}" 
+                                            title="Số điện thoại phải gồm đúng 10 chữ số." 
+                                            inputmode="numeric" 
+                                            required />
+                                     <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                                 </div>
                     </div>
 
                     <div class="row">
