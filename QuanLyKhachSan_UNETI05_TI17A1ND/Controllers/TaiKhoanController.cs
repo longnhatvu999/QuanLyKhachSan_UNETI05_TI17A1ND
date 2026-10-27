@@ -60,9 +60,17 @@ namespace QuanLyKhachSan_UNETI05_TI17A1ND.Controllers
                 return View(model);
             }
 
+            // ===== Lấy tên khách hàng mới nhất =====
+            var khachHang = await _context.KhachHangs
+                .FirstOrDefaultAsync(k => k.MaTaiKhoan == taiKhoan.MaTaiKhoan);
+
+            string hoTenHienThi = !string.IsNullOrWhiteSpace(khachHang?.HoTen)
+                ? khachHang.HoTen
+                : taiKhoan.HoTen;
+
             // ===== Lưu Session =====
             HttpContext.Session.SetInt32("MaTaiKhoan", taiKhoan.MaTaiKhoan);
-            HttpContext.Session.SetString("HoTen", taiKhoan.HoTen);
+            HttpContext.Session.SetString("HoTen", hoTenHienThi);
             HttpContext.Session.SetString("VaiTro", taiKhoan.VaiTro);
             HttpContext.Session.SetString("TenDangNhap", taiKhoan.TenDangNhap);
 
