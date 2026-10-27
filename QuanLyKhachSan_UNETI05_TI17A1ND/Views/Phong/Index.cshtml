@@ -1,10 +1,13 @@
-﻿@model IEnumerable<QuanLyKhachSan_UNETI05_TI17A1ND.Models.Phong>
+﻿```cshtml
+@model IEnumerable<QuanLyKhachSan_UNETI05_TI17A1ND.Models.Phong>
+
 @{
     ViewData["Title"] = "Danh sách phòng";
+
     var vaiTro = Context.Session.GetString("VaiTro");
     var laAdmin = vaiTro == "Admin";
 
-    // Lấy thông tin phân trang từ ViewBag
+    // Lấy thông tin phân trang
     int currentPage = ViewBag.CurrentPage ?? 1;
     int totalPages = ViewBag.TotalPages ?? 1;
     int totalItems = ViewBag.TotalItems ?? 0;
@@ -20,7 +23,10 @@
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2><i class="bi bi-door-closed"></i> Danh sách phòng</h2>
+    <h2>
+        <i class="bi bi-door-closed"></i> Danh sách phòng
+    </h2>
+
     @if (laAdmin)
     {
         <a asp-action="Create" class="btn btn-success">
@@ -29,69 +35,117 @@
     }
 </div>
 
+
 @* ============================================================ *@
 @* FORM TÌM KIẾM / LỌC / SẮP XẾP                                *@
 @* ============================================================ *@
+
 <div class="card mb-3">
     <div class="card-body">
+
         <form asp-action="Index" method="get" class="row g-2">
+
             @* Giữ sortOrder khi submit form *@
             <input type="hidden" name="sortOrder" value="@sortOrder" />
 
             <div class="col-md-3">
                 <label class="form-label small">Tìm kiếm</label>
-                <input type="text" name="searchString" value="@searchString"
-                       class="form-control" placeholder="Số phòng hoặc tên loại phòng..." />
+
+                <input type="text"
+                       name="searchString"
+                       value="@searchString"
+                       class="form-control"
+                       placeholder="Số phòng hoặc tên loại phòng..." />
             </div>
+
 
             <div class="col-md-2">
                 <label class="form-label small">Loại phòng</label>
-                <select name="maLoaiPhong" asp-items="ViewBag.DanhSachLoaiPhong" class="form-select">
+
+                <select name="maLoaiPhong"
+                        asp-items="ViewBag.DanhSachLoaiPhong"
+                        class="form-select">
+
                     <option value="">-- Tất cả --</option>
+
                 </select>
             </div>
+
 
             <div class="col-md-1">
                 <label class="form-label small">Tầng</label>
-                <select name="tang" asp-items="ViewBag.DanhSachTang" class="form-select">
+
+                <select name="tang"
+                        asp-items="ViewBag.DanhSachTang"
+                        class="form-select">
+
                     <option value="">-- Tất cả --</option>
+
                 </select>
             </div>
+
 
             <div class="col-md-2">
                 <label class="form-label small">Trạng thái</label>
-                <select name="trangThai" asp-items="ViewBag.DanhSachTrangThai" class="form-select">
+
+                <select name="trangThai"
+                        asp-items="ViewBag.DanhSachTrangThai"
+                        class="form-select">
+
                     <option value="">-- Tất cả --</option>
+
                 </select>
             </div>
 
+
             <div class="col-md-2">
                 <label class="form-label small">Giá từ</label>
-                <input type="number" name="minGia" value="@minGia" class="form-control" step="50000" />
+
+                <input type="number"
+                       name="minGia"
+                       value="@minGia"
+                       class="form-control"
+                       step="50000" />
             </div>
+
 
             <div class="col-md-2">
                 <label class="form-label small">Giá đến</label>
-                <input type="number" name="maxGia" value="@maxGia" class="form-control" step="50000" />
+
+                <input type="number"
+                       name="maxGia"
+                       value="@maxGia"
+                       class="form-control"
+                       step="50000" />
             </div>
 
+
             <div class="col-md-12 text-end mt-2">
+
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-search"></i> Tìm kiếm
                 </button>
+
                 <a asp-action="Index" class="btn btn-secondary">
                     <i class="bi bi-x-circle"></i> Xóa bộ lọc
                 </a>
+
             </div>
+
         </form>
+
     </div>
 </div>
 
+
 @* ============================================================ *@
-@* SORT HEADER LINKS                                              *@
+@* SẮP XẾP                                                       *@
 @* ============================================================ *@
+
 <div class="mb-2 small">
+
     <strong>Sắp xếp:</strong>
+
     @{
         string SortLink(string ascValue, string descValue, string label)
         {
@@ -100,14 +154,14 @@
 
             string nextOrder;
 
-            // Chưa sắp xếp hoặc đang giảm → bấm sẽ tăng
+            // Chưa sắp xếp hoặc đang giảm -> bấm sẽ tăng
             if (!isAsc)
             {
                 nextOrder = ascValue;
             }
-            // Đang tăng → bấm sẽ giảm
             else
             {
+                // Đang tăng -> bấm sẽ giảm
                 nextOrder = descValue;
             }
 
@@ -137,91 +191,204 @@
             return $"<a href='{url}' class='btn btn-sm btn-outline-secondary {(isAsc || isDesc ? "active" : "")}'>{label}{arrow}</a>";
         }
     }
+
     @Html.Raw(SortLink("soPhong_asc", "soPhong_desc", "Số phòng"))
+
     @Html.Raw(SortLink("gia_asc", "gia_desc", "Giá"))
+
     @Html.Raw(SortLink("tang_asc", "tang_desc", "Tầng"))
+
 </div>
 
+
 @* ============================================================ *@
-@* BẢNG DỮ LIỆU                                                  *@
+@* BẢNG DANH SÁCH PHÒNG                                          *@
 @* ============================================================ *@
+
 @if (Model.Any())
 {
     <table class="table table-bordered table-hover align-middle">
+
         <thead class="table-light">
+
             <tr>
-                <th>Mã</th>
+
+                @* ĐÃ XÓA CỘT MÃ PHÒNG *@
+                @* ĐÃ XÓA CỘT STT *@
+
                 <th>Số phòng</th>
+
                 <th>Loại phòng</th>
-                <th class="text-center">Tầng</th>
-                <th class="text-end">Đơn giá đêm</th>
-                <th class="text-center">Trạng thái</th>
-                <th class="text-center">Thao tác</th>
+
+                <th class="text-center">
+                    Tầng
+                </th>
+
+                <th class="text-end">
+                    Đơn giá đêm
+                </th>
+
+                <th class="text-center">
+                    Trạng thái
+                </th>
+
+                <th class="text-center">
+                    Thao tác
+                </th>
+
             </tr>
+
         </thead>
+
+
         <tbody>
+
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.MaPhong</td>
-                    <td><strong>@item.SoPhong</strong></td>
-                    <td>@item.LoaiPhong?.TenLoaiPhong</td>
-                    <td class="text-center">@item.Tang</td>
-                    <td class="text-end">@item.DonGiaDem.ToString("N0") VNĐ</td>
+
+                    @* Chỉ hiển thị Số phòng *@
+                    <td>
+                        <strong>@item.SoPhong</strong>
+                    </td>
+
+
+                    <td>
+                        @item.LoaiPhong?.TenLoaiPhong
+                    </td>
+
+
                     <td class="text-center">
+                        @item.Tang
+                    </td>
+
+
+                    <td class="text-end">
+                        @item.DonGiaDem.ToString("N0") VNĐ
+                    </td>
+
+
+                    <td class="text-center">
+
                         @switch (item.TrangThai)
                         {
                             case "Sẵn sàng":
-                                <span class="badge bg-success">Sẵn sàng</span>
+
+                                <span class="badge bg-success">
+                                    Sẵn sàng
+                                </span>
+
                                 break;
+
+
                             case "Đang sử dụng":
-                                <span class="badge bg-warning text-dark">Đang sử dụng</span>
+
+                                <span class="badge bg-warning text-dark">
+                                    Đang sử dụng
+                                </span>
+
                                 break;
+
+
                             case "Tạm ngừng":
-                                <span class="badge bg-secondary">Tạm ngừng</span>
+
+                                <span class="badge bg-secondary">
+                                    Tạm ngừng
+                                </span>
+
                                 break;
                         }
+
                     </td>
+
+
                     <td class="text-center text-nowrap">
-                        <a asp-action="Details" asp-route-id="@item.MaPhong" class="btn btn-sm btn-info" title="Chi tiết">
+
+                        @* Chi tiết *@
+
+                        <a asp-action="Details"
+                           asp-route-id="@item.MaPhong"
+                           class="btn btn-sm btn-info"
+                           title="Chi tiết">
+
                             <i class="bi bi-eye"></i>
+
                         </a>
+
 
                         @if (laAdmin)
                         {
-                            <a asp-action="Edit" asp-route-id="@item.MaPhong" class="btn btn-sm btn-warning" title="Sửa">
+                            @* Sửa *@
+
+                            <a asp-action="Edit"
+                               asp-route-id="@item.MaPhong"
+                               class="btn btn-sm btn-warning"
+                               title="Sửa">
+
                                 <i class="bi bi-pencil"></i>
+
                             </a>
-                            <a asp-action="Delete" asp-route-id="@item.MaPhong" class="btn btn-sm btn-danger" title="Xóa">
+
+
+                            @* Xóa *@
+
+                            <a asp-action="Delete"
+                               asp-route-id="@item.MaPhong"
+                               class="btn btn-sm btn-danger"
+                               title="Xóa">
+
                                 <i class="bi bi-trash"></i>
+
                             </a>
                         }
-                        else if (Context.Session.GetInt32("MaTaiKhoan") != null && item.TrangThai == "Sẵn sàng")
+                        else if (
+                            Context.Session.GetInt32("MaTaiKhoan") != null
+                            && item.TrangThai == "Sẵn sàng"
+                        )
                         {
-                            <a asp-controller="PhieuDatPhong" asp-action="DatPhong" asp-route-maPhong="@item.MaPhong"
-                               class="btn btn-sm btn-success" title="Đặt phòng">
-                                <i class="bi bi-calendar-plus"></i> Đặt
+                            @* Đặt phòng *@
+
+                            <a asp-controller="PhieuDatPhong"
+                               asp-action="DatPhong"
+                               asp-route-maPhong="@item.MaPhong"
+                               class="btn btn-sm btn-success"
+                               title="Đặt phòng">
+
+                                <i class="bi bi-calendar-plus"></i>
+                                Đặt
+
                             </a>
                         }
+
                     </td>
+
                 </tr>
             }
+
         </tbody>
+
     </table>
 
+
     @* ============================================================ *@
-    @* PHÂN TRANG (giữ điều kiện)                                    *@
+    @* PHÂN TRANG                                                    *@
     @* ============================================================ *@
+
     @if (totalPages > 1)
     {
         <nav>
+
             <ul class="pagination justify-content-center">
 
-                @* ==================================================
-               NÚT TRANG ĐẦU
-               ================================================== *@
+
+                @* ================================================== *@
+                @* TRANG ĐẦU                                          *@
+                @* ================================================== *@
+
                 <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                    <a class="page-link" href="@Url.Action("Index", new
+
+                    <a class="page-link"
+                       href="@Url.Action("Index", new
                        {
                            searchString,
                            maLoaiPhong,
@@ -232,16 +399,23 @@
                            sortOrder,
                            page = 1
                        })">
-                        <i class="bi bi-chevron-double-left"></i> Đầu
+
+                        <i class="bi bi-chevron-double-left"></i>
+                        Đầu
+
                     </a>
+
                 </li>
 
 
-                @* ==================================================
-               NÚT TRANG TRƯỚC
-               ================================================== *@
+                @* ================================================== *@
+                @* TRANG TRƯỚC                                       *@
+                @* ================================================== *@
+
                 <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                    <a class="page-link" href="@Url.Action("Index", new
+
+                    <a class="page-link"
+                       href="@Url.Action("Index", new
                        {
                            searchString,
                            maLoaiPhong,
@@ -252,18 +426,25 @@
                            sortOrder,
                            page = currentPage - 1
                        })">
-                        <i class="bi bi-chevron-left"></i> Trước
+
+                        <i class="bi bi-chevron-left"></i>
+                        Trước
+
                     </a>
+
                 </li>
 
 
-                @* ==================================================
-               SỐ TRANG
-               ================================================== *@
+                @* ================================================== *@
+                @* SỐ TRANG                                           *@
+                @* ================================================== *@
+
                 @for (int i = 1; i <= totalPages; i++)
                 {
                     <li class="page-item @(i == currentPage ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("Index", new
+
+                        <a class="page-link"
+                           href="@Url.Action("Index", new
                            {
                                searchString,
                                maLoaiPhong,
@@ -274,17 +455,23 @@
                                sortOrder,
                                page = i
                            })">
+
                             @i
+
                         </a>
+
                     </li>
                 }
 
 
-                @* ==================================================
-               NÚT TRANG SAU
-               ================================================== *@
+                @* ================================================== *@
+                @* TRANG SAU                                          *@
+                @* ================================================== *@
+
                 <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-                    <a class="page-link" href="@Url.Action("Index", new
+
+                    <a class="page-link"
+                       href="@Url.Action("Index", new
                        {
                            searchString,
                            maLoaiPhong,
@@ -295,16 +482,23 @@
                            sortOrder,
                            page = currentPage + 1
                        })">
-                        Sau <i class="bi bi-chevron-right"></i>
+
+                        Sau
+                        <i class="bi bi-chevron-right"></i>
+
                     </a>
+
                 </li>
 
 
-                @* ==================================================
-               NÚT TRANG CUỐI
-               ================================================== *@
+                @* ================================================== *@
+                @* TRANG CUỐI                                         *@
+                @* ================================================== *@
+
                 <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-                    <a class="page-link" href="@Url.Action("Index", new
+
+                    <a class="page-link"
+                       href="@Url.Action("Index", new
                        {
                            searchString,
                            maLoaiPhong,
@@ -315,22 +509,41 @@
                            sortOrder,
                            page = totalPages
                        })">
-                        Cuối <i class="bi bi-chevron-double-right"></i>
+
+                        Cuối
+                        <i class="bi bi-chevron-double-right"></i>
+
                     </a>
+
                 </li>
 
             </ul>
+
         </nav>
 
+
         <p class="text-center text-muted small">
-            Trang <strong>@currentPage</strong> / @totalPages
-            — Tổng <strong>@totalItems</strong> phòng
+
+            Trang
+            <strong>@currentPage</strong>
+            /
+            @totalPages
+
+            — Tổng
+            <strong>@totalItems</strong>
+            phòng
+
         </p>
     }
 }
 else
 {
     <div class="alert alert-warning text-center">
-        <i class="bi bi-info-circle"></i> Không tìm thấy phòng nào phù hợp.
+
+        <i class="bi bi-info-circle"></i>
+
+        Không tìm thấy phòng nào phù hợp.
+
     </div>
 }
+```
