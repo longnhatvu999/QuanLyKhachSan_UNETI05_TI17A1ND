@@ -118,27 +118,8 @@
             </form>
         }
 
-        @if (Model.TrangThai == "Chờ xác nhận" || Model.TrangThai == "Đã xác nhận")
-        {
-            <form asp-action="HuyPhieu" asp-route-id="@Model.MaPhieuDat" method="post" class="d-inline">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-danger"
-                        onclick="return confirm('Bạn có chắc chắn muốn hủy phiếu này?');">
-                    <i class="bi bi-x-circle"></i> Hủy phiếu
-                </button>
-            </form>
-        }
+       
     }
 
-    @* ========== NÚT HỦY CHO KHÁCH HÀNG (chỉ khi Chờ xác nhận) ========== *@
-    @if (!laAdmin && Model.TrangThai == "Chờ xác nhận")
-    {
-        <form asp-action="HuyPhieu" asp-route-id="@Model.MaPhieuDat" method="post" class="d-inline">
-            @Html.AntiForgeryToken()
-            <button type="submit" class="btn btn-danger"
-                    onclick="return confirm('Bạn có chắc chắn muốn hủy phiếu này?');">
-                <i class="bi bi-x-circle"></i> Hủy phiếu
-            </button>
-        </form>
-    }
+    
 </div>
