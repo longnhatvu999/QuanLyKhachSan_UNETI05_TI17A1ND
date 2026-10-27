@@ -325,13 +325,16 @@ namespace QuanLyKhachSan_UNETI05_TI17A1ND.Controllers
             return View(lichSu);
         }
 
-        public async Task<IActionResult> Index(string? searchString, string? trangThai)
+        //ADMIN:Quản lý và lọc phiếu
+        public async Task<IActionResult> Index( string? searchString,string? trangThai,DateTime? tuNgay,DateTime? denNgay)
         {
             if (HttpContext.Session.GetString("VaiTro") != "Admin")
                 return RedirectToAction("TuChoi", "TaiKhoan");
 
             ViewBag.SearchString = searchString;
             ViewBag.TrangThai = trangThai;
+            ViewBag.TuNgay = tuNgay?.ToString("yyyy-MM-dd");
+            ViewBag.DenNgay = denNgay?.ToString("yyyy-MM-dd");
 
             var query = _context.PhieuDatPhongs
                 .Include(p => p.KhachHang)
@@ -343,21 +346,48 @@ namespace QuanLyKhachSan_UNETI05_TI17A1ND.Controllers
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 searchString = searchString.Trim();
-                query = query.Where(p => p.KhachHang!.HoTen.Contains(searchString));
+                query = query.Where(p =>
+                    p.KhachHang!.HoTen.Contains(searchString));
             }
 
             // Lọc theo trạng thái
             if (!string.IsNullOrWhiteSpace(trangThai))
+            {
                 query = query.Where(p => p.TrangThai == trangThai);
+            }
+
+            // Lọc từ ngày nhận phòng dự kiến
+            if (tuNgay.HasValue)
+            {
+                var ngayBatDau = tuNgay.Value.Date;
+                query = query.Where(p =>
+                    p.NgayNhanDuKien >= ngayBatDau);
+            }
+
+            // Lọc đến ngày nhận phòng dự kiến
+            if (denNgay.HasValue)
+            {
+                var ngayKetThuc = denNgay.Value.Date.AddDays(1);
+                query = query.Where(p =>
+                    p.NgayNhanDuKien < ngayKetThuc);
+            }
 
             ViewBag.DanhSachTrangThai = new[]
             {
-        "Chờ xác nhận", "Đã xác nhận", "Đã nhận phòng", "Đã trả phòng", "Đã hủy"
+        "Chờ xác nhận",
+        "Đã xác nhận",
+        "Đã nhận phòng",
+        "Đã trả phòng",
+        "Đã hủy"
     };
 
-            var ds = await query.OrderByDescending(p => p.NgayDat).ToListAsync();
+            var ds = await query
+                .OrderByDescending(p => p.NgayDat)
+                .ToListAsync();
+
             return View("Index_Admin", ds);
         }
+
 
         // ==================================================
         // ADMIN: Xác nhận phiếu đặt (Chờ xác nhận → Đã xác nhận)
