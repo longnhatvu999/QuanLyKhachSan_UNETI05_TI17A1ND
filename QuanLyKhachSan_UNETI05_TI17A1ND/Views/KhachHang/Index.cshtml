@@ -65,6 +65,12 @@
                         <a asp-action="Details" asp-route-id="@kh.MaKhachHang" class="btn btn-sm btn-info" title="Chi tiết">
                             <i class="bi bi-eye"></i>
                         </a>
+                        <a asp-action="Sua"
+                           asp-route-id="@kh.MaKhachHang"
+                           class="btn btn-sm btn-warning"
+                           title="Sửa thông tin">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
                         <form asp-action="ToggleTrangThai" asp-route-id="@kh.MaKhachHang" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-sm @(kh.TrangThai ? "btn-outline-danger" : "btn-outline-success")"
