@@ -162,6 +162,7 @@ namespace QuanLyKhachSan_UNETI05_TI17A1ND.Controllers
                 return View(kh);
 
             await _context.SaveChangesAsync();
+            HttpContext.Session.SetString("HoTen", kh.HoTen);
             TempData["Success"] = "Cập nhật thông tin cá nhân thành công!";
             return RedirectToAction(nameof(ThongTinCaNhan));
         }
