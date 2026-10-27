@@ -324,8 +324,9 @@ namespace QuanLyKhachSan_UNETI05_TI17A1ND.Controllers
 
             return View(lichSu);
         }
-
+        // ==================================================
         //ADMIN:Quản lý và lọc phiếu
+        // ==================================================
         public async Task<IActionResult> Index( string? searchString,string? trangThai,DateTime? tuNgay,DateTime? denNgay)
         {
             if (HttpContext.Session.GetString("VaiTro") != "Admin")
