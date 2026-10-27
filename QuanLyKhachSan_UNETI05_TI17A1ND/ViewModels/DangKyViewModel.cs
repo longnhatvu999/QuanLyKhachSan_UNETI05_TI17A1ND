@@ -42,8 +42,10 @@ namespace QuanLyKhachSan_UNETI05_TI17A1ND.ViewModels
         public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
-        [Phone(ErrorMessage = "Số điện thoại không hợp lệ")]
-        [StringLength(15)]
+        // Ép buộc đúng 10 ký tự ở phía Server
+        [StringLength(10, MinimumLength = 10, ErrorMessage = "Số điện thoại phải có đúng 10 chữ số.")]
+        // Chỉ cho phép nhập số (từ 0-9) và đúng 10 số
+        [RegularExpression(@"^[0-9]{10}$", ErrorMessage = "Số điện thoại không hợp lệ (phải là 10 chữ số).")]
         [Display(Name = "Số điện thoại")]
         public string SoDienThoai { get; set; } = string.Empty;
 

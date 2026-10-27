@@ -75,6 +75,83 @@ namespace QuanLyKhachSan_UNETI05_TI17A1ND.Controllers
             return View(kh);
         }
 
+        // ADMIN: Hiển thị trang sửa thông tin khách hàng
+        [HttpGet]
+        public async Task<IActionResult> Sua(int? id)
+        {
+            if (HttpContext.Session.GetString("VaiTro") != "Admin")
+            {
+                return RedirectToAction("TuChoi", "TaiKhoan");
+            }
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var kh = await _context.KhachHangs
+                .FirstOrDefaultAsync(k => k.MaKhachHang == id);
+
+            if (kh == null)
+            {
+                return NotFound();
+            }
+
+            return View("SuaThongTin",kh);
+        }
+
+        // ADMIN: Lưu thông tin khách hàng sau khi sửa
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Sua(int id, KhachHang model)
+        {
+            if (HttpContext.Session.GetString("VaiTro") != "Admin")
+            {
+                return RedirectToAction("TuChoi", "TaiKhoan");
+            }
+
+            if (id != model.MaKhachHang)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var kh = await _context.KhachHangs
+                .Include(k => k.TaiKhoan)
+                .FirstOrDefaultAsync(k => k.MaKhachHang == id);
+
+            if (kh == null)
+            {
+                return NotFound();
+            }
+
+            kh.HoTen = model.HoTen;
+            kh.NgaySinh = model.NgaySinh;
+            kh.GioiTinh = model.GioiTinh;
+            kh.SoDienThoai = model.SoDienThoai;
+            kh.Email = model.Email;
+            kh.CCCD = model.CCCD;
+            kh.DiaChi = model.DiaChi;
+
+            // Đồng bộ tên và email sang tài khoản đăng nhập
+            if (kh.TaiKhoan != null)
+            {
+                kh.TaiKhoan.HoTen = kh.HoTen;
+                kh.TaiKhoan.Email = kh.Email;
+            }
+
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Cập nhật thông tin khách hàng thành công!";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
         // ==================================================
         // ADMIN: Cập nhật trạng thái
         // ==================================================

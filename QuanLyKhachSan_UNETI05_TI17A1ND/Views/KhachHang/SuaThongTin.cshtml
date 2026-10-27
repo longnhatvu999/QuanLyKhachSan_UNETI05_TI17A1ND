@@ -1,14 +1,23 @@
-﻿@model QuanLyKhachSan_UNETI05_TI17A1ND.Models.KhachHang
+﻿
+@model QuanLyKhachSan_UNETI05_TI17A1ND.Models.KhachHang
 
 @{
     ViewData["Title"] = "Sửa thông tin khách hàng";
+    var vaiTro = Context.Session.GetString("VaiTro");
+    var laAdmin = vaiTro == "Admin";
     var ngayToiDa = DateTime.Today.AddYears(-18).ToString("yyyy-MM-dd");
 }
 
 <div class="container mt-4">
     <h2 class="mb-4">Sửa thông tin khách hàng</h2>
 
-    <form asp-action="SuaThongTin" method="post" id="formSuaThongTin">
+    <form asp-action="@(laAdmin ? "Sua" : "SuaThongTin")"
+          asp-route-id="@Model.MaKhachHang"
+          method="post"
+          id="formSuaThongTin">
+
+        @Html.AntiForgeryToken()
+
         <div asp-validation-summary="ModelOnly"
              class="text-danger mb-3"></div>
 
@@ -83,12 +92,21 @@
 
         <div class="mt-4">
             <button type="submit" class="btn btn-primary">
-                Lưu thay đổi
+                <i class="bi bi-save"></i> Lưu thay đổi
             </button>
 
-            <a asp-action="Index" class="btn btn-secondary">
-                Quay lại
-            </a>
+            @if (laAdmin)
+            {
+                <a asp-action="Index" class="btn btn-secondary">
+                    Quay lại danh sách
+                </a>
+            }
+            else
+            {
+                <a asp-action="ThongTinCaNhan" class="btn btn-secondary">
+                    Quay lại
+                </a>
+            }
         </div>
     </form>
 </div>
@@ -106,22 +124,24 @@
         const loiSoDienThoai = document.getElementById("loiSoDienThoai");
         const loiNgaySinh = document.getElementById("loiNgaySinh");
 
-        // Tính ngày sinh muộn nhất để khách hàng đủ 18 tuổi.
-        const homNay = new Date();
-        const ngayToiDa = new Date(
-            homNay.getFullYear() - 18,
-            homNay.getMonth(),
-            homNay.getDate()
-        );
+        function layNgayToiDa() {
+            const homNay = new Date();
+            const ngay = new Date(
+                homNay.getFullYear() - 18,
+                homNay.getMonth(),
+                homNay.getDate()
+            );
 
-        const nam = ngayToiDa.getFullYear();
-        const thang = String(ngayToiDa.getMonth() + 1).padStart(2, "0");
-        const ngay = String(ngayToiDa.getDate()).padStart(2, "0");
+            const nam = ngay.getFullYear();
+            const thang = String(ngay.getMonth() + 1).padStart(2, "0");
+            const ngayTrongThang = String(ngay.getDate()).padStart(2, "0");
 
-        const ngayHopLeToiDa = `${nam}-${thang}-${ngay}`;
+            return `${nam}-${thang}-${ngayTrongThang}`;
+        }
+
+        const ngayHopLeToiDa = layNgayToiDa();
         ngaySinh.max = ngayHopLeToiDa;
 
-        // Chỉ cho phép nhập chữ số và tối đa 10 số điện thoại.
         soDienThoai.addEventListener("input", function () {
             this.value = this.value.replace(/[^0-9]/g, "").slice(0, 10);
             kiemTraSoDienThoai();
@@ -138,7 +158,6 @@
             return true;
         }
 
-        // Kiểm tra ngày sinh và điều kiện đủ 18 tuổi.
         function kiemTraNgaySinh() {
             if (!ngaySinh.value) {
                 loiNgaySinh.textContent = "Vui lòng nhập ngày sinh.";
@@ -157,7 +176,6 @@
 
         ngaySinh.addEventListener("change", kiemTraNgaySinh);
 
-        // Kiểm tra trước khi gửi biểu mẫu.
         form.addEventListener("submit", function (event) {
             const sdtHopLe = kiemTraSoDienThoai();
             const ngaySinhHopLe = kiemTraNgaySinh();
